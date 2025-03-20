@@ -1,28 +1,26 @@
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
   HttpCode,
   HttpStatus,
   Post,
-  SerializeOptions,
-  UseGuards,
-  UseInterceptors,
+  SerializeOptions
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
 import {
   LoginBodyDTO,
   LoginResDTO,
+  LogoutBodyDTO,
+  LogoutResDTO,
   RefreshTokenBodyDTO,
   RefreshTokenResDTO,
   RegisterBodyDTO,
   RegisterResDTO,
 } from './auth.dto';
-import { AccessTokenGuard } from 'src/shared/guards/access-token.guard';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   /**
    * Nếu đã khai báo ở app.module không cần dùng nó ở đây nữa
@@ -46,7 +44,6 @@ export class AuthController {
     return new LoginResDTO(await this.authService.login(body));
   }
 
-  @UseGuards(AccessTokenGuard)
   @Post('refresh-token')
   @HttpCode(HttpStatus.OK)
   async refreshToken(@Body() body: RefreshTokenBodyDTO) {
@@ -54,5 +51,11 @@ export class AuthController {
     return new RefreshTokenResDTO(
       await this.authService.refreshToken(body.refreshToken),
     );
+  }
+
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  async logout(@Body() body:LogoutBodyDTO) {
+    return new LogoutResDTO(await this.authService.logout(body.refreshToken))
   }
 }

@@ -116,4 +116,39 @@ export class AuthService {
       throw new UnauthorizedException();
     }
   }
+
+  async logout(refreshToken: string) {
+    try {
+      // Decode to get user id
+      const { userId } =
+        await this.tokenService.verifyRefreshToken(refreshToken);
+
+      // Check is it exist in DB
+      await this.prismaService.refreshToken.findUniqueOrThrow({
+        where: {
+          token: refreshToken,
+        },
+      });
+
+      // Delete it
+      await this.prismaService.refreshToken.delete({
+        where: {
+          token: refreshToken,
+        },
+      });
+
+      return {
+        message : 'Logout successfully'
+      }
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        throw new UnauthorizedException('Refresh token has been revoked');
+      }
+
+      throw new UnauthorizedException();
+    }
+  }
 }

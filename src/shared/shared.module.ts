@@ -13,6 +13,9 @@ const shareService = [PrismaService, HashingService, TokenService];
 @Global()
 @Module({
   providers: [...shareService, AccessTokenGuard, ApiKeyGuard, {
+    /**
+     * Áp dụng AuthenticationGuard cho toàn bộ code bằng APP_GUARD (built-in nestjs)
+     */
     provide: APP_GUARD,
     useClass: AuthenticationGuard
   }],
