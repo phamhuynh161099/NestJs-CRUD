@@ -38,10 +38,10 @@ export class RegisterResDTO {
   createdAt: Date;
   updatedAt: Date;
 
-  @Expose() // Tao ra them truong moi cho DTO
-  get customeProperty() {
-    return `${this.id} - ${this.email}`;
-  }
+  // @Expose() // Tao ra them truong moi cho DTO
+  // get customeProperty() {
+  //   return `${this.id} - ${this.email}`;
+  // }
 
   constructor(partial: Partial<RegisterResDTO>) {
     Object.assign(this, partial);

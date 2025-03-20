@@ -14,7 +14,7 @@ export class PostsService {
       data: {
         title: body.title,
         content: body.content,
-        authorId: 1,
+        authorId: 14,
       },
     });
   }
