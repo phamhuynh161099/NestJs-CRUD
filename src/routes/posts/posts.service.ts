@@ -3,18 +3,18 @@ import { PrismaService } from '../../shared/services/prisma.service';
 
 @Injectable()
 export class PostsService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) { }
 
   getPosts() {
     return this.prismaService.post.findMany();
   }
 
-  createPost(body: any) {
+  createPost(body: any, userId: any) {
     return this.prismaService.post.create({
       data: {
         title: body.title,
         content: body.content,
-        authorId: 14,
+        authorId: userId,
       },
     });
   }
